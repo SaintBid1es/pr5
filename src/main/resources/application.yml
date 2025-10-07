@@ -2,7 +2,7 @@ spring:
   config:
     name: practypdb
   datasource:
-    url: jdbc:postgresql://localhost:5432/4db
+    url: jdbc:postgresql://localhost:5432/6pr
     username: postgres
     password: 1
     driver-class-name: org.postgresql.Driver

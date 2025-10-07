@@ -385,11 +385,7 @@
                     Логин <i th:text="${sort=='username' ? (dir=='asc' ? '↑' : '↓') : ''}"></i>
                 </a>
             </th>
-            <th>
-                <a th:href="@{/customers/list(sort='role', dir=${sort=='role' && dir=='asc' ? 'desc' : 'asc'}, search=${search}, showDeleted=${showDeleted})}">
-                    Роль <i th:text="${sort=='role' ? (dir=='asc' ? '↑' : '↓') : ''}"></i>
-                </a>
-            </th>
+            <th>Роли</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -403,15 +399,10 @@
                 <span class="username" th:text="${cust.username}"></span>
             </td>
             <td>
-                <span th:if="${cust.role == 'USER'}" class="role-badge role-user">
-                    USER
+                <span th:each="r : ${cust.roles}" th:text="${r.name}"
+                      th:classappend="${r.name=='USER'} ? ' role-badge role-user' : (${r.name=='MANAGER'} ? ' role-badge role-manager' : ' role-badge role-admin')">
                 </span>
-                <span th:if="${cust.role == 'MANAGER'}" class="role-badge role-manager">
-                    MANAGER
-                </span>
-                <span th:if="${cust.role == 'ADMIN'}" class="role-badge role-admin">
-                    ADMIN
-                </span>
+                <span th:if="${cust.roles.empty}" class="role-badge">—</span>
             </td>
             <td class="actions-col">
                 <a th:href="@{/customers/edit/{id}(id=${cust.id})}" class="button warning"
@@ -440,11 +431,9 @@
         </tr>
 
         <tr th:if="${customerPage.content.empty}">
-        <tr th:if="${tagPage.content.empty}">
-            <td colspan="3" style="text-align: center; padding: 40px; color: #666;">
+            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
                 <i>📝</i> Пользователи не найдены
             </td>
-        </tr>
         </tr>
         </tbody>
     </table>

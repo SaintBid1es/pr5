@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список категорий</title>
+    <title>Виды спорта — категории</title>
     <style>
         :root {
           --primary: #007bff;
@@ -278,7 +278,7 @@
 <body>
 <div class="container">
     <h1>
-        Список категорий
+        Виды спорта / Категории
     </h1>
 
     <div class="stats" th:if="${categoryPage}">
@@ -302,15 +302,15 @@
             <span th:text="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'В админ-панель' : 'В панель менеджера'}"></span>
         </a>
         <a href="/categories/new" class="button success">
-            <i>+</i> Добавить категорию
+            <i>+</i> Добавить вид спорта/категорию
         </a>
     </div>
 
     <form class="filter-form" method="get" action="/categories/list">
         <div class="form-group">
-            <label for="search">Поиск по названию:</label>
+            <label for="search">Поиск по виду спорта:</label>
             <input type="text" id="search" name="search" th:value="${search}"
-                   placeholder="Введите название категории...">
+                   placeholder="Футбол, Баскетбол, Бег, Туризм...">
         </div>
 
         <div class="checkbox-group">

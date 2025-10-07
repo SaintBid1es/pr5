@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${tag.id != null ? 'Редактировать тег' : 'Добавить тег'}"></title>
+    <title th:text="${tag.id != null ? 'Редактировать тег' : 'Добавить тег (экипировка/бренд/сезон)'}"></title>
     <style>
         :root {
             --primary: #007bff;
@@ -145,21 +145,19 @@
 <body>
 <div class="container">
     <h1>
-        <span th:text="${tag.id != null ? 'Редактировать тег' : 'Добавить тег'}"></span>
+        <span th:text="${tag.id != null ? 'Редактировать тег' : 'Добавить тег (экипировка/бренд/сезон)'}"></span>
     </h1>
 
     <form th:action="@{${tag.id != null ? '/tags/update/' + tag.id : '/tags/save'}}"
           method="post" th:object="${tag}">
 
         <div class="form-group">
-            <label for="name">Название тега:</label>
+            <label for="name">Название тега (например, Nike, утепление, защита):</label>
             <input type="text" id="name" th:field="*{name}"
-                   placeholder="Введите название тега..." required
+                   placeholder="Например: Nike, Adidas, лето, гетры, защита..." required
                    th:classappend="${#fields.hasErrors('name')} ? 'error-border'">
             <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-            <div class="help-text">
-                Название тега должно содержать от 2 до 50 символов
-            </div>
+            <div class="help-text">От 2 до 50 символов</div>
         </div>
 
         <div class="button-group">

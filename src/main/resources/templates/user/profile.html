@@ -55,9 +55,13 @@
 <p>Имя: <span th:text="${customer.firstName}"></span></p>
 <p>Фамилия: <span th:text="${customer.lastName}"></span></p>
 <p>Email: <span th:text="${customer.email}"></span></p>
-<p>Адрес: <span th:text="${customer.profile.address}"></span></p>
+<p>Адрес: <span th:text="${customer.profile != null ? customer.profile.address : 'Адрес не указан'}"></span></p>
 
+<a href="/user/orders">История заказов</a>
 <a href="/user/products">Список товаров</a>
+<form action="/logout" method="post" style="margin-top: 12px; text-align: center;">
+    <button type="submit" style="padding: 10px 20px; border: none; border-radius: 6px; background: #dc3545; color: #fff; font-weight: 600; cursor: pointer;">Выйти</button>
+    </form>
 <a href="/user/profile/edit">Редактировать профиль</a>
 
 </body>

@@ -1,6 +1,8 @@
 package com.mpt.practyp.controller;
 
 import com.mpt.practyp.model.Customer;
+import com.mpt.practyp.model.Role;
+import com.mpt.practyp.repository.RoleRepository;
 import com.mpt.practyp.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,12 +24,16 @@ public class CustomerController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     private static final int PAGE_SIZE = 10;
 
     @GetMapping("/list")
     public String listCustomers(
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "firstName") String sort,
             @RequestParam(defaultValue = "asc") String dir,
             @RequestParam(required = false) String search,
@@ -35,7 +41,7 @@ public class CustomerController {
             Model model
     ) {
         Sort.Direction direction = dir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(direction, sort));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort));
 
         Page<Customer> customerPage;
         if (search != null && !search.isEmpty()) {
@@ -46,6 +52,8 @@ public class CustomerController {
 
         model.addAttribute("customerPage", customerPage);
         model.addAttribute("search", search);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
         model.addAttribute("sort", sort);
         model.addAttribute("dir", dir);
         model.addAttribute("showDeleted", showDeleted);
@@ -72,18 +80,31 @@ public class CustomerController {
         if (customer == null) return "redirect:/customers/list";
 
         model.addAttribute("customer", customer);
+        model.addAttribute("roles", roleRepository.findAll());
         return "customer-form";
     }
 
     @PostMapping("/save")
-    public String saveCustomer(@ModelAttribute Customer customer) {
+    public String saveCustomer(@ModelAttribute Customer customer,
+                               @RequestParam(name = "roleIds", required = false) java.util.List<Long> roleIds) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
+        java.util.Set<Role> roles = new java.util.HashSet<>();
+        if (roleIds != null && !roleIds.isEmpty()) {
+            roleRepository.findAllById(roleIds).forEach(roles::add);
+        } else {
+            roleRepository.findByName("USER").ifPresent(roles::add);
+        }
+        customer.setRoles(roles);
+
         customerService.create(customer);
         return "redirect:/customers/list";
     }
 
     @PostMapping("/update/{id}")
-    public String updateCustomer(@PathVariable Long id, @ModelAttribute Customer customer) {
+    public String updateCustomer(@PathVariable Long id,
+                                 @ModelAttribute Customer customer,
+                                 @RequestParam(name = "roleIds", required = false) java.util.List<Long> roleIds) {
         Customer existingCustomer = customerService.findById(id);
         if (existingCustomer == null) return "redirect:/customers/list";
 
@@ -91,7 +112,11 @@ public class CustomerController {
         existingCustomer.setLastName(customer.getLastName());
         existingCustomer.setEmail(customer.getEmail());
         existingCustomer.setUsername(customer.getUsername());
-        existingCustomer.setRole(customer.getRole());
+        if (roleIds != null) {
+            java.util.Set<Role> roles = new java.util.HashSet<>();
+            roleRepository.findAllById(roleIds).forEach(roles::add);
+            existingCustomer.setRoles(roles);
+        }
 
         customerService.update(existingCustomer);
         return "redirect:/customers/list";
@@ -100,6 +125,7 @@ public class CustomerController {
     @GetMapping("/new")
     public String showForm(Model model) {
         model.addAttribute("customer", new Customer());
+        model.addAttribute("roles", roleRepository.findAll());
         return "customer-form";
     }
 }

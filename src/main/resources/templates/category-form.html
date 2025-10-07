@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${category.id != null ? 'Редактировать категорию' : 'Добавить категорию'}"></title>
+    <title th:text="${category.id != null ? 'Редактировать вид спорта' : 'Добавить вид спорта'}"></title>
     <style>
         :root {
             --primary: #007bff;
@@ -155,33 +155,31 @@
 <body>
 <div class="container">
     <h1>
-        <span th:text="${category.id != null ? 'Редактировать категорию' : 'Добавить категорию'}"></span>
+        <span th:text="${category.id != null ? 'Редактировать вид спорта' : 'Добавить вид спорта'}"></span>
     </h1>
 
     <form th:action="@{${category.id != null ? '/categories/update/' + category.id : '/categories/save'}}"
           method="post" th:object="${category}">
 
         <div class="form-group">
-            <label for="name">Название категории:</label>
+            <label for="name">Название вида спорта/категории:</label>
             <input type="text" id="name" th:field="*{name}"
-                   placeholder="Введите название категории..." required
+                   placeholder="Футбол, Бег, Туризм..." required
                    th:classappend="${#fields.hasErrors('name')} ? 'error-border'">
             <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-            <div class="help-text">
-                Название категории должно содержать от 2 до 100 символов
-            </div>
+            <div class="help-text">От 2 до 100 символов</div>
         </div>
 
         <div class="button-group">
             <button type="submit">
-                <span th:text="${category.id != null ? 'Обновить' : 'Создать'}"></span>
+            <span th:text="${category.id != null ? 'Обновить' : 'Создать'}"></span>
             </button>
         </div>
     </form>
 
     <div class="form-footer">
         <a th:href="@{/categories/list}" class="back-link">
-            <i>←</i> Назад к списку категорий
+            <i>←</i> Назад к списку видов спорта
         </a>
     </div>
 </div>

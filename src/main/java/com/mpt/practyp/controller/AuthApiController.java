@@ -1,7 +1,9 @@
 package com.mpt.practyp.controller;
 
 import com.mpt.practyp.model.Customer;
+import com.mpt.practyp.model.Role;
 import com.mpt.practyp.repository.CustomerRepository;
+import com.mpt.practyp.repository.RoleRepository;
 import com.mpt.practyp.security.JwtTokenUtil;
 import com.mpt.practyp.service.CustomUserDetailsService;
 import jakarta.validation.Valid;
@@ -32,6 +34,9 @@ public class AuthApiController {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -89,8 +94,15 @@ public class AuthApiController {
 
             customer.setProfile(profile);
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-            customer.setRole("USER");
             customer.setDeleted(false);
+
+            Role userRole = roleRepository.findByName("USER")
+                    .orElseGet(() -> {
+                        Role newRole = new Role("USER");
+                        return roleRepository.save(newRole);
+                    });
+
+            customer.getRoles().add(userRole);
 
             Customer savedCustomer = customerRepository.save(customer);
 
@@ -103,16 +115,20 @@ public class AuthApiController {
             response.put("firstName", savedCustomer.getFirstName());
             response.put("lastName", savedCustomer.getLastName());
             response.put("email", savedCustomer.getEmail());
-            response.put("role", savedCustomer.getRole());
+            response.put("roles", savedCustomer.getRoles()
+                    .stream()
+                    .map(Role::getName)
+                    .toList());
 
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Registration failed");
+            error.put("error", "Registration failed: " + e.getMessage());
             return ResponseEntity.badRequest().body(error);
         }
     }
+
 
 
     public static class LoginRequest {

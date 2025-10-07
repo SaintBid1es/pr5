@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Добавить продукт</title>
+  <title>Добавить спортивный товар</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
@@ -303,10 +303,10 @@
 <div class="container">
   <div class="header">
     <div class="header-icon">
-      <i class="fas fa-cube"></i>
+      <i class="fas fa-football-ball"></i>
     </div>
-    <h1>Добавить продукт</h1>
-    <p class="subtitle">Заполните информацию о новом продукте</p>
+    <h1>Добавить спортивный товар</h1>
+    <p class="subtitle">Укажите данные о товаре: вид спорта, размер, бренд</p>
   </div>
 
   <div class="form-container">
@@ -314,10 +314,10 @@
       <div class="form-group">
         <label>
           <i class="fas fa-tag"></i>
-          Название продукта
+          Название товара
         </label>
         <div class="input-wrapper">
-          <input type="text" th:field="*{name}" placeholder="Введите название продукта" />
+          <input type="text" th:field="*{name}" placeholder="Мяч футбольный, Кроссовки беговые и т.п." />
         </div>
         <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error">
           <i class="fas fa-exclamation-circle"></i>
@@ -331,7 +331,7 @@
           Описание
         </label>
         <div class="input-wrapper">
-          <textarea th:field="*{description}" placeholder="Опишите характеристики продукта..."></textarea>
+          <textarea th:field="*{description}" placeholder="Характеристики: размер, материал, бренд, назначение..."></textarea>
         </div>
         <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error">
           <i class="fas fa-exclamation-circle"></i>
@@ -357,7 +357,7 @@
         <div class="form-group">
           <label>
             <i class="fas fa-folder"></i>
-            Категория
+            Вид спорта / Категория
           </label>
           <div class="input-wrapper">
             <select th:field="*{category.id}">
@@ -371,7 +371,7 @@
       <div class="form-group">
         <label>
           <i class="fas fa-hashtag"></i>
-          Теги
+          Теги (экипировка, бренд, сезон)
         </label>
         <div class="input-wrapper">
           <select multiple="multiple" th:field="*{tags}">
@@ -384,7 +384,7 @@
       <div class="actions">
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-save"></i>
-          Сохранить продукт
+          Сохранить товар
         </button>
         <a th:href="@{/products/list}" class="btn btn-secondary">
           <i class="fas fa-arrow-left"></i>

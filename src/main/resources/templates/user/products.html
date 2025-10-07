@@ -38,7 +38,7 @@
             font-weight: 600;
             color: #2980b9;
         }
-        a {
+        a, button {
             display: block;
             margin: 40px auto 0;
             width: max-content;
@@ -52,9 +52,11 @@
             transition: background-color 0.3s ease;
             text-align: center;
         }
-        a:hover {
+        a:hover, button:hover {
             background-color: #2980b9;
         }
+        form.add-to-cart { margin: 0; }
+        form.add-to-cart button { margin: 0; padding: 8px 14px; box-shadow: none; }
     </style>
 </head>
 <body>
@@ -64,9 +66,19 @@
     <li th:each="product : ${products}">
         <span th:text="${product.name}">Product Name</span>
         <span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + ' ₽'">Price</span>
+        <form class="add-to-cart" th:action="@{/user/cart/add}" method="post">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit">В корзину</button>
+        </form>
     </li>
 </ul>
 
+<a href="/user/orders">История заказов</a>
+<a href="/user/cart">Перейти в корзину</a>
+<form action="/logout" method="post" style="margin-top: 12px; text-align: center;">
+    <button type="submit" style="padding: 10px 20px; border: none; border-radius: 6px; background: #dc3545; color: #fff; font-weight: 600; cursor: pointer;">Выйти</button>
+    </form>
 <a href="/user/profile">Мой профиль</a>
 </body>
 </html>

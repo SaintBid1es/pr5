@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Список продуктов</title>
+  <title>Спортивные товары — каталог</title>
   <style>
     :root {
       --primary: #007bff;
@@ -293,13 +293,13 @@
 <body>
 <div class="container">
   <h1>
-    Список продуктов
+    Каталог спортивных товаров
   </h1>
 
   <div class="stats" th:if="${productPage}">
     <div class="stat-item">
       <span class="stat-value" th:text="${productPage.totalElements}">0</span>
-      <span class="stat-label">Всего продуктов</span>
+      <span class="stat-label">Всего товаров</span>
     </div>
     <div class="stat-item">
       <span class="stat-value" th:text="${productPage.number + 1}">1</span>
@@ -317,7 +317,7 @@
       <span th:text="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'В админ-панель' : 'В панель менеджера'}"></span>
     </a>
     <a href="/products/new" class="button success">
-      <i>+</i> Добавить продукт
+      <i>+</i> Добавить спортивный товар
     </a>
   </div>
 
@@ -325,11 +325,11 @@
     <div class="form-group">
       <label for="search">Поиск по названию:</label>
       <input type="text" id="search" name="search" th:value="${search}"
-             placeholder="Введите название продукта...">
+             placeholder="Введите название спортивного товара (мяч, кроссовки)...">
     </div>
 
     <div class="form-group">
-      <label for="categoryId">Категория:</label>
+      <label for="categoryId">Вид спорта/категория:</label>
       <select id="categoryId" name="categoryId">
         <option value="">Все категории</option>
         <option th:each="cat : ${categories}"
@@ -372,8 +372,8 @@
           Цена <i th:text="${sort=='price' ? (dir=='asc' ? '↑' : '↓') : ''}"></i>
         </a>
       </th>
-      <th>Категория</th>
-      <th>Теги</th>
+      <th>Вид спорта</th>
+      <th>Теги (экипировка)</th>
       <th>Действия</th>
     </tr>
     </thead>
@@ -419,7 +419,7 @@
 
     <tr th:if="${productPage.content.empty}">
       <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
-        <i>📝</i> Продукты не найдены
+        <i>🏀</i> Товары не найдены. Попробуйте изменить фильтры
       </td>
     </tr>
     </tbody>
@@ -428,7 +428,7 @@
   <div class="pagination">
     <div class="pagination-info">
       Показано <span th:text="${productPage.numberOfElements}">0</span> из
-      <span th:text="${productPage.totalElements}">0</span> продуктов
+      <span th:text="${productPage.totalElements}">0</span> товаров
     </div>
 
     <div class="pagination-links">

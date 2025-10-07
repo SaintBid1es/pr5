@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список тегов</title>
+    <title>Теги экипировки</title>
     <style>
         :root {
           --primary: #007bff;
@@ -260,7 +260,7 @@
 <body>
 <div class="container">
     <h1>
-        Список тегов
+        Теги экипировки
     </h1>
 
     <div class="stats" th:if="${tagPage}">
@@ -284,15 +284,15 @@
             <span th:text="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'В админ-панель' : 'В панель менеджера'}"></span>
         </a>
         <a href="/tags/new" class="button success">
-            <i>+</i> Добавить тег
+            <i>+</i> Добавить тег (бренд/тип)
         </a>
     </div>
 
     <form class="filter-form" method="get" action="/tags/list">
         <div class="form-group">
-            <label for="search">Поиск по названию:</label>
+            <label for="search">Поиск по тегу:</label>
             <input type="text" id="search" name="search" th:value="${search}"
-                   placeholder="Введите название тега...">
+                   placeholder="Например: Nike, зима, защита, аксессуары...">
         </div>
 
         <div class="checkbox-group">

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${customer.id != null ? 'Редактировать клиента' : 'Добавить клиента'}"></title>
+    <title th:text="${customer.id != null ? 'Редактировать пользователя' : 'Добавить пользователя'}"></title>
     <style>
         /* Стили остаются такими же как в предыдущей версии */
         :root {
@@ -178,7 +178,7 @@
 <body>
 <div class="container">
     <h1>
-        <span th:text="${customer.id != null ? 'Редактировать клиента' : 'Добавить клиента'}"></span>
+        <span th:text="${customer.id != null ? 'Редактировать пользователя' : 'Добавить пользователя'}"></span>
     </h1>
 
     <form th:action="@{${customer.id != null ? '/customers/update/' + customer.id : '/customers/save'}}"
@@ -222,25 +222,14 @@
         </div>
 
         <div class="form-group">
-            <label>Роль:</label>
-            <div class="role-badges">
-                <div class="role-badge" th:classappend="${customer.role == 'USER'} ? 'selected'"
-                     onclick="selectRole('USER')">
-                    USER
-                </div>
-                <div class="role-badge" th:classappend="${customer.role == 'MANAGER'} ? 'selected'"
-                     onclick="selectRole('MANAGER')">
-                    MANAGER
-                </div>
-                <div class="role-badge" th:classappend="${customer.role == 'ADMIN'} ? 'selected'"
-                     onclick="selectRole('ADMIN')">
-                    ADMIN
-                </div>
+            <label>Роли:</label>
+            <div class="role-badges" style="gap:6px;flex-wrap:wrap;">
+                <label class="role-badge" th:each="r : ${roles}" th:classappend="${#sets.contains(customer.roles, r)} ? 'selected'">
+                    <input type="checkbox" name="roleIds" th:value="${r.id}" th:checked="${#sets.contains(customer.roles, r)}" style="display:none;">
+                    <span th:text="${r.name}">ROLE</span>
+                </label>
             </div>
-            <input type="hidden" name="role" id="roleInput" th:value="${customer.role != null ? customer.role : 'USER'}"/>
-            <div class="help-text">
-                Выберите роль пользователя в системе
-            </div>
+            <div class="help-text">Отметьте одну или несколько ролей</div>
         </div>
 
         <div class="button-group">
@@ -252,34 +241,19 @@
 
     <div class="form-footer">
         <a th:href="@{/customers/list}" class="back-link">
-            <i>←</i> Назад к списку клиентов
+            <i>←</i> Назад к списку пользователей
         </a>
     </div>
 </div>
 
 <script>
-    function selectRole(role) {
-        document.getElementById('roleInput').value = role;
-
-        const badges = document.querySelectorAll('.role-badge');
-        badges.forEach(badge => {
-            badge.classList.remove('selected');
-        });
-
-        badges.forEach(badge => {
-            if (badge.textContent.includes(role)) {
-                badge.classList.add('selected');
-            }
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentRole = document.getElementById('roleInput').value;
-        if (currentRole) {
-            selectRole(currentRole);
-        } else {
-            selectRole('USER');
-        }
+    // Переключение визуального выделения по клику на бейдж
+    document.addEventListener('click', function(e) {
+        const label = e.target.closest('label.role-badge');
+        if (!label) return;
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        label.classList.toggle('selected', checkbox.checked);
     });
 </script>
 </body>
